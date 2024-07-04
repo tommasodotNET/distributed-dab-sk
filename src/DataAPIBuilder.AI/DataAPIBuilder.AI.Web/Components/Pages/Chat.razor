@@ -1,0 +1,73 @@
+﻿@page "/chat"
+@using Microsoft.SemanticKernel
+@using Microsoft.SemanticKernel.Plugins.OpenApi
+@using Microsoft.SemanticKernel.Connectors.OpenAI
+@using Microsoft.SemanticKernel.Plugins.OpenApi.Extensions
+@using Microsoft.SemanticKernel.PromptTemplates.Handlebars
+@rendermode InteractiveServer
+@inject Kernel kernel
+
+<PageTitle>Chat</PageTitle>
+
+<h1>Chat</h1>
+
+<label>Type in your query to ask a question about your data.</label>
+<br />
+
+<div style="padding-right: 25em;">
+    <input class="input queryinput" 
+        type="text"
+        @bind-value="SearchString" />
+</div>
+<br />
+
+<button class="button querybutton" @onclick="Search" >Search</button>
+
+<div>
+    @if (Response != null)
+    {
+        @((MarkupString)Response)
+    }
+</div>
+
+@code {
+    protected string? SearchString { get; set; }
+    protected string? Response { get; set; }
+
+    protected async Task Search()
+    { 
+        await kernel.ImportPluginFromOpenApiAsync(
+            pluginName: "GQLPlugin",
+            filePath: @"D:\src\dab-for-sk\Plugins\DAB_GraphQL\openapi.yaml",
+            executionParameters: new OpenApiFunctionExecutionParameters()
+            {
+                ServerUrlOverride = new Uri("https://dm-dab-aca-app.thankfulplant-306104b6.westeurope.azurecontainerapps.io"),
+                EnableDynamicPayload = true,
+                IgnoreNonCompliantErrors = true,
+                EnablePayloadNamespacing = true,
+            });
+
+        var promptTemplate = File.ReadAllText(@"D:\src\dab-for-sk\Prompts\agent_gql.yaml");
+
+        var _promptFunction = kernel.CreateFunctionFromPromptYaml(promptTemplate, promptTemplateFactory: new HandlebarsPromptTemplateFactory());
+
+        var kernelArgs = new KernelArguments()
+        {
+            ["chat_history"] = SearchString
+        };
+
+        var cancellationToken = new System.Threading.CancellationToken();
+
+        var promptResult = await _promptFunction.InvokeAsync<string>(kernel, kernelArgs, cancellationToken);
+        Response = promptResult;
+        
+        @* var promptResult = _promptFunction.InvokeStreamingAsync<string>(kernel, kernelArgs, cancellationToken);
+
+        await foreach (var update in promptResult.WithCancellation(cancellationToken).ConfigureAwait(false))
+        {
+            if (string.IsNullOrEmpty(update)) { continue; }
+
+            Response += update;
+        } *@
+    }
+}
