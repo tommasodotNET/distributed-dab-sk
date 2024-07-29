@@ -43,13 +43,14 @@
 
     override protected void OnInitialized()
     {
-        var httpClient = _httpClientFactory.CreateClient("DABClient");
+        var dabClient = _httpClientFactory.CreateClient("DABClient");
         kernel.ImportPluginFromOpenApiAsync(
             pluginName: "GQLPlugin",
             filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Plugins\DAB_GraphQL\openapi.yml"),
             executionParameters: new OpenApiFunctionExecutionParameters()
             {
-                ServerUrlOverride = httpClient.BaseAddress,
+                @* ServerUrlOverride = dabClient.BaseAddress, *@
+                ServerUrlOverride = new Uri("https://dm-dab-aca-app.thankfulplant-306104b6.westeurope.azurecontainerapps.io"),
                 EnableDynamicPayload = true,
                 IgnoreNonCompliantErrors = true,
                 EnablePayloadNamespacing = true,
