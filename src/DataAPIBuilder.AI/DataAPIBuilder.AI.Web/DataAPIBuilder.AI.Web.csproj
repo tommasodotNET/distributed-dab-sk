@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="..\..\Plugins\DAB_GraphQL\openapi.json">
+    <None Update="..\..\Plugins\DAB_GraphQL\openapi.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="..\..\Prompts\agent_gql.yaml">

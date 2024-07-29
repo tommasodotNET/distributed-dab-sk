@@ -1,0 +1,317 @@
+creating resource group 'rg-dab-on-aca'
+{
+  "id": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca",
+  "location": "westeurope",
+  "managedBy": null,
+  "name": "rg-dab-on-aca",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": null,
+  "type": "Microsoft.Resources/resourceGroups"
+}
+creating storage account: 'sadabonaca'
+{
+  "accessTier": "Hot",
+  "accountMigrationInProgress": null,
+  "allowBlobPublicAccess": false,
+  "allowCrossTenantReplication": false,
+  "allowSharedKeyAccess": null,
+  "allowedCopyScope": null,
+  "azureFilesIdentityBasedAuthentication": null,
+  "blobRestoreStatus": null,
+  "creationTime": "2024-05-22T15:08:30.245359+00:00",
+  "customDomain": null,
+  "defaultToOAuthAuthentication": null,
+  "dnsEndpointType": null,
+  "enableHttpsTrafficOnly": true,
+  "enableNfsV3": null,
+  "encryption": {
+    "encryptionIdentity": null,
+    "keySource": "Microsoft.Storage",
+    "keyVaultProperties": null,
+    "requireInfrastructureEncryption": null,
+    "services": {
+      "blob": {
+        "enabled": true,
+        "keyType": "Account",
+        "lastEnabledTime": "2024-05-22T15:08:30.510983+00:00"
+      },
+      "file": {
+        "enabled": true,
+        "keyType": "Account",
+        "lastEnabledTime": "2024-05-22T15:08:30.510983+00:00"
+      },
+      "queue": null,
+      "table": null
+    }
+  },
+  "extendedLocation": null,
+  "failoverInProgress": null,
+  "geoReplicationStats": null,
+  "id": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/providers/Microsoft.Storage/storageAccounts/sadabonaca",
+  "identity": null,
+  "immutableStorageWithVersioning": null,
+  "isHnsEnabled": null,
+  "isLocalUserEnabled": null,
+  "isSftpEnabled": null,
+  "isSkuConversionBlocked": null,
+  "keyCreationTime": {
+    "key1": "2024-05-22T15:08:30.495355+00:00",
+    "key2": "2024-05-22T15:08:30.495355+00:00"
+  },
+  "keyPolicy": null,
+  "kind": "StorageV2",
+  "largeFileSharesState": null,
+  "lastGeoFailoverTime": null,
+  "location": "westeurope",
+  "minimumTlsVersion": "TLS1_0",
+  "name": "sadabonaca",
+  "networkRuleSet": {
+    "bypass": "AzureServices",
+    "defaultAction": "Allow",
+    "ipRules": [],
+    "ipv6Rules": [],
+    "resourceAccessRules": null,
+    "virtualNetworkRules": []
+  },
+  "primaryEndpoints": {
+    "blob": "https://sadabonaca.blob.core.windows.net/",
+    "dfs": "https://sadabonaca.dfs.core.windows.net/",
+    "file": "https://sadabonaca.file.core.windows.net/",
+    "internetEndpoints": null,
+    "microsoftEndpoints": null,
+    "queue": "https://sadabonaca.queue.core.windows.net/",
+    "table": "https://sadabonaca.table.core.windows.net/",
+    "web": "https://sadabonaca.z6.web.core.windows.net/"
+  },
+  "primaryLocation": "westeurope",
+  "privateEndpointConnections": [],
+  "provisioningState": "Succeeded",
+  "publicNetworkAccess": null,
+  "resourceGroup": "rg-dab-on-aca",
+  "routingPreference": null,
+  "sasPolicy": null,
+  "secondaryEndpoints": null,
+  "secondaryLocation": null,
+  "sku": {
+    "name": "Standard_LRS",
+    "tier": "Standard"
+  },
+  "statusOfPrimary": "available",
+  "statusOfSecondary": null,
+  "storageAccountSkuConversionStatus": null,
+  "tags": {},
+  "type": "Microsoft.Storage/storageAccounts"
+}
+retrieving storage connection string
+creating file share
+{
+  "created": true
+}
+uploading configuration file './dab-config.json'
+{
+  "content_md5": "0x00x770x9d0x820x4d0x970x7d0xfd0x7c0x910x670xd00x310x6c0x9a0xa",
+  "date": "2024-05-22T15:08:55+00:00",
+  "etag": "\"0x8DC7A7119DFBF7F\"",
+  "file_last_write_time": "2024-05-22T15:08:56.3754879Z",
+  "last_modified": "2024-05-22T15:08:56+00:00",
+  "request_id": "8d8e3992-901a-004b-2659-ac6165000000",
+  "request_server_encrypted": true,
+  "version": "2022-11-02"
+}
+create log analytics workspace 'law-dab-on-aca'
+{
+  "createdDate": "2024-05-22T14:40:34.8094789Z",
+  "customerId": "95f2d7fa-8e23-4a74-aff8-f1ef919ce020",
+  "etag": "\"cf00bd01-0000-0d00-0000-664e0a8a0000\"",
+  "features": {
+    "enableLogAccessUsingOnlyResourcePermissions": true
+  },
+  "id": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/providers/Microsoft.OperationalInsights/workspaces/law-dab-on-aca",
+  "location": "westeurope",
+  "modifiedDate": "2024-05-22T15:08:58.7837741Z",
+  "name": "law-dab-on-aca",
+  "provisioningState": "Succeeded",
+  "publicNetworkAccessForIngestion": "Enabled",
+  "publicNetworkAccessForQuery": "Enabled",
+  "resourceGroup": "rg-dab-on-aca",
+  "retentionInDays": 30,
+  "sku": {
+    "lastSkuUpdate": "2024-05-22T14:40:34.8094789Z",
+    "name": "PerGB2018"
+  },
+  "type": "Microsoft.OperationalInsights/workspaces",
+  "workspaceCapping": {
+    "dailyQuotaGb": -1.0,
+    "dataIngestionStatus": "RespectQuota",
+    "quotaNextResetTime": "2024-05-23T10:00:00Z"
+  }
+}
+retrieving log analytics client id
+retrieving log analytics secret
+retrieving storage key
+creating container apps environment: 'dm-dab-aca-env'
+{
+  "id": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/providers/Microsoft.App/managedEnvironments/dm-dab-aca-env",
+  "location": "West Europe",
+  "name": "dm-dab-aca-env",
+  "properties": {
+    "appLogsConfiguration": {
+      "destination": "log-analytics",
+      "logAnalyticsConfiguration": {
+        "customerId": "95f2d7fa-8e23-4a74-aff8-f1ef919ce020",
+        "sharedKey": null
+      }
+    },
+    "customDomainConfiguration": {
+      "certificatePassword": null,
+      "certificateValue": null,
+      "customDomainVerificationId": "9238D1D67913567889DA9024737C2F2EBF57FF377C609DD4D7330C1F6CD4BF3A",
+      "dnsSuffix": null,
+      "expirationDate": null,
+      "subjectName": null,
+      "thumbprint": null
+    },
+    "daprAIConnectionString": null,
+    "daprAIInstrumentationKey": null,
+    "daprConfiguration": {
+      "version": "1.12.5"
+    },
+    "defaultDomain": "thankfulplant-306104b6.westeurope.azurecontainerapps.io",
+    "eventStreamEndpoint": "https://westeurope.azurecontainerapps.dev/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/managedEnvironments/dm-dab-aca-env/eventstream",
+    "infrastructureResourceGroup": null,
+    "kedaConfiguration": {
+      "version": "2.12.1"
+    },
+    "peerAuthentication": {
+      "mtls": {
+        "enabled": false
+      }
+    },
+    "peerTrafficConfiguration": {
+      "encryption": {
+        "enabled": false
+      }
+    },
+    "provisioningState": "Succeeded",
+    "staticIp": "108.142.61.153",
+    "vnetConfiguration": null,
+    "workloadProfiles": [
+      {
+        "name": "Consumption",
+        "workloadProfileType": "Consumption"
+      }
+    ],
+    "zoneRedundant": false
+  },
+  "resourceGroup": "rg-dab-on-aca",
+  "systemData": {
+    "createdAt": "2024-05-22T15:09:16.1156582",
+    "createdBy": "tstocchi@microsoft.com",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-05-22T15:09:16.1156582",
+    "lastModifiedBy": "tstocchi@microsoft.com",
+    "lastModifiedByType": "User"
+  },
+  "type": "Microsoft.App/managedEnvironments"
+}
+waiting to finalize the ACA environment
+get ACA environment id
+mount storage account on azure container apps environment
+creating container app : 'dm-dab-aca-app' on the environment : 'dm-dab-aca-env'
+{
+  "id": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/providers/Microsoft.Resources/deployments/dab-on-aca",
+  "location": null,
+  "name": "dab-on-aca",
+  "properties": {
+    "correlationId": "a94f8d43-1c78-4d8a-b042-37f7cfb27a65",
+    "debugSetting": null,
+    "dependencies": [],
+    "duration": "PT18.9673143S",
+    "error": null,
+    "mode": "Incremental",
+    "onErrorDeployment": null,
+    "outputResources": [
+      {
+        "id": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/providers/Microsoft.App/containerApps/dm-dab-aca-app",
+        "resourceGroup": "rg-dab-on-aca"
+      }
+    ],
+    "outputs": {
+      "fqdn": {
+        "type": "String",
+        "value": "dm-dab-aca-app.thankfulplant-306104b6.westeurope.azurecontainerapps.io"
+      }
+    },
+    "parameters": {
+      "appName": {
+        "type": "String",
+        "value": "dm-dab-aca-app"
+      },
+      "connectionString": {
+        "type": "SecureString"
+      },
+      "dabConfigFileName": {
+        "type": "String",
+        "value": "dab-config.json"
+      },
+      "environmentId": {
+        "type": "String",
+        "value": "/subscriptions/8c831b26-1aef-4843-9513-06420f059cd7/resourceGroups/rg-dab-on-aca/providers/Microsoft.App/managedEnvironments/dm-dab-aca-env"
+      },
+      "isExternalIngress": {
+        "type": "Bool",
+        "value": true
+      },
+      "location": {
+        "type": "String",
+        "value": "westeurope"
+      },
+      "mountedStorageName": {
+        "type": "String",
+        "value": "dabconfig"
+      },
+      "tag": {
+        "type": "String",
+        "value": "latest"
+      }
+    },
+    "parametersLink": null,
+    "providers": [
+      {
+        "id": null,
+        "namespace": "Microsoft.App",
+        "providerAuthorizationConsentState": null,
+        "registrationPolicy": null,
+        "registrationState": null,
+        "resourceTypes": [
+          {
+            "aliases": null,
+            "apiProfiles": null,
+            "apiVersions": null,
+            "capabilities": null,
+            "defaultApiVersion": null,
+            "locationMappings": null,
+            "locations": [
+              "westeurope"
+            ],
+            "properties": null,
+            "resourceType": "containerApps",
+            "zoneMappings": null
+          }
+        ]
+      }
+    ],
+    "provisioningState": "Succeeded",
+    "templateHash": "1319689461473969775",
+    "templateLink": null,
+    "timestamp": "2024-05-22T15:12:22.988292+00:00",
+    "validatedResources": null
+  },
+  "resourceGroup": "rg-dab-on-aca",
+  "tags": null,
+  "type": "Microsoft.Resources/deployments"
+}
+get the azure container app FQDN
+done

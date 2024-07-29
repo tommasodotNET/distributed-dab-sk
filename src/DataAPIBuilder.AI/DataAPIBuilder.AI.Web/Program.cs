@@ -13,10 +13,15 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
-builder.Services.AddSingleton( sp => {
+builder.Services.AddTransient( sp => {
     return Kernel.CreateBuilder()
         .AddAzureOpenAIChatCompletion("gpt-4o", "https://oai-tstocchi-us.openai.azure.com/", "3599e954626f493bb34c4e68c270fcd9")
         .Build();
+});
+
+builder.Services.AddHttpClient("DABClient", client =>
+{
+    client.BaseAddress = new("https+http://dab");
 });
 
 var app = builder.Build();

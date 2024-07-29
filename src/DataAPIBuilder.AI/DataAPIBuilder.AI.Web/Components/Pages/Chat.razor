@@ -1,4 +1,5 @@
 ﻿@page "/chat"
+@using DistributedAPIBuilder.AI.Resources
 @using Microsoft.SemanticKernel
 @using Microsoft.SemanticKernel.Plugins.OpenApi
 @using Microsoft.SemanticKernel.Connectors.OpenAI
@@ -6,21 +7,21 @@
 @using Microsoft.SemanticKernel.PromptTemplates.Handlebars
 @rendermode InteractiveServer
 @inject Kernel kernel
+@inject IHttpClientFactory _httpClientFactory
 
-<PageTitle>Chat</PageTitle>
-
-<h1>Chat</h1>
+<h3>Chat</h3>
 
 <label>Type in your query to ask a question about your data.</label>
 <br />
-
+<InputCheckbox @bind-Value="GraphQL" />
+<br />
 <div style="padding-right: 25em;">
     <input class="input queryinput" 
         type="text"
-        @bind-value="SearchString" />
+        @bind-value="SearchString"
+        @onkeyup="@Enter" />
 </div>
 <br />
-
 <button class="button querybutton" @onclick="Search" >Search</button>
 
 <div>
@@ -30,44 +31,89 @@
     }
 </div>
 
+<br />
+<br />
+
+
 @code {
     protected string? SearchString { get; set; }
     protected string? Response { get; set; }
+    protected bool IsVisible { get; set; }
+    protected bool GraphQL = false;
 
-    protected async Task Search()
-    { 
-        await kernel.ImportPluginFromOpenApiAsync(
+    override protected void OnInitialized()
+    {
+        var httpClient = _httpClientFactory.CreateClient("DABClient");
+        kernel.ImportPluginFromOpenApiAsync(
             pluginName: "GQLPlugin",
-            filePath: @"D:\src\dab-for-sk\Plugins\DAB_GraphQL\openapi.yaml",
+            filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Plugins\DAB_GraphQL\openapi.yml"),
             executionParameters: new OpenApiFunctionExecutionParameters()
             {
-                ServerUrlOverride = new Uri("https://dm-dab-aca-app.thankfulplant-306104b6.westeurope.azurecontainerapps.io"),
+                ServerUrlOverride = httpClient.BaseAddress,
                 EnableDynamicPayload = true,
                 IgnoreNonCompliantErrors = true,
                 EnablePayloadNamespacing = true,
-            });
+            })
+        .GetAwaiter().GetResult();
+    }
 
-        var promptTemplate = File.ReadAllText(@"D:\src\dab-for-sk\Prompts\agent_gql.yaml");
+    protected async Task Search()
+    {
+        ShowSpinner();
+
+        var promptTemplate = PromptLoader.Load("agent_gql.yaml");
+        @* var promptTemplate = EmbeddedResource.Read("agent_rest.yaml");  *@
+
+        var _settings = new OpenAIPromptExecutionSettings()
+        {
+            ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+            Temperature = 0.1,
+            MaxTokens = 500,
+            ResultsPerPrompt = 1,
+        };
 
         var _promptFunction = kernel.CreateFunctionFromPromptYaml(promptTemplate, promptTemplateFactory: new HandlebarsPromptTemplateFactory());
 
-        var kernelArgs = new KernelArguments()
+        var kernelArgs = new KernelArguments(_settings)
         {
-            ["chat_history"] = SearchString
+            ["query"] = SearchString
         };
 
         var cancellationToken = new System.Threading.CancellationToken();
-
-        var promptResult = await _promptFunction.InvokeAsync<string>(kernel, kernelArgs, cancellationToken);
-        Response = promptResult;
         
-        @* var promptResult = _promptFunction.InvokeStreamingAsync<string>(kernel, kernelArgs, cancellationToken);
+        var promptResult = _promptFunction.InvokeStreamingAsync<string>(kernel, kernelArgs, cancellationToken);
 
         await foreach (var update in promptResult.WithCancellation(cancellationToken).ConfigureAwait(false))
         {
             if (string.IsNullOrEmpty(update)) { continue; }
 
             Response += update;
-        } *@
+        }
+
+        await InvokeAsync(() =>
+        {
+            HideSpinner();
+        });
     }
+
+    public async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await InvokeAsync(Search);
+        }
+    }
+
+    public void ShowSpinner()
+    {
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    public void HideSpinner()
+    {
+        IsVisible = false;
+        StateHasChanged();
+    }
+
 }
