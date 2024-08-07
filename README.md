@@ -11,9 +11,9 @@ To start the project, you need to have the following tools installed:
 
 To configure and test Data API Builder, you need to [install the `dab cli`](https://learn.microsoft.com/en-us/azure/data-api-builder/how-to-install-cli).
 
-## How To
+## Configuring variables
 
-To get started with Data API Builder, refer to the [official documentation](https://learn.microsoft.com/en-us/azure/data-api-builder/).
+To get started with Data API Builder, refer to the [official documentation](https://learn.microsoft.com/en-us/azure/data-api-builder/). I am going to refer to Data API Builder as dab from now on.
 
 To run the project locally, you need to configure few variables in the appsettings:
 - the database connection string in the `appsettings.Development.json` file of `DataAPIBuilder.AI.AppHost` project:
@@ -44,7 +44,14 @@ azd infra synth
 
 > **_NOTE:_**  To run `azd infra synth` we need to enable the feature since it is still in alpha by running `azd config set alpha.infraSynth on`.
 
-When running azd infra synth, the folders containing the biceps and the yaml templates for the Azure Container Apps will be created in two infra folders.
+When running azd infra synth, the folders containing the biceps and the yaml templates for the Azure Container Apps will be created in two infra folders. From now on, every time we run `azd up`, the infra folders will be used for the deployment and the changes made in the AppHost won't be considered until we run `azd infra synth` again.
+
+After running the `azd infra synth` command, we can follow these steps:
+- [address the issue with the sqldb connection string parameter](#avoiding-the-issue-with-sqldb-connection-string-parameter)
+- `azd up` to provision the infrastructure and deploy the code
+- retrieve the name of the Volume Mount created by azd
+- [address the issue with the configuration file](#configuring-data-api-builder-to-find-the-configuration-file)
+- `azd up` to apply the changes to the dab's Azure Container App configuration
 
 ### Avoiding the issue with sqldb connection string parameter
 
