@@ -1,5 +1,4 @@
 ﻿@page "/chat"
-@using DistributedAPIBuilder.AI.Resources
 @using Microsoft.SemanticKernel
 @using Microsoft.SemanticKernel.Plugins.OpenApi
 @using Microsoft.SemanticKernel.Connectors.OpenAI
@@ -45,7 +44,7 @@
     {
         kernel.ImportPluginFromOpenApiAsync(
             pluginName: "GQLPlugin",
-            filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins\DAB_GraphQL\openapi.yml"),
+            filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins/DAB_GraphQL/openapi.yml"),
             executionParameters: new OpenApiFunctionExecutionParameters()
             {
                 ServerUrlOverride = new Uri(Environment.GetEnvironmentVariable("services__dab__http__0")),

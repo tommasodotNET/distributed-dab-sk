@@ -1,4 +1,4 @@
-namespace DataAPIBuilder.AI;
+namespace DataAPIBuilder.AI.Web;
 
 public class PromptLoader
 {

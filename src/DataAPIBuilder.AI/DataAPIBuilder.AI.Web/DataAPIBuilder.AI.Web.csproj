@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAPIBuilder.AI.ServiceDefaults\DataAPIBuilder.AI.ServiceDefaults.csproj" />
-        <PackageReference Include="Microsoft.SemanticKernel" Version="1.13.0" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.13.0" />
     <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.13.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Yaml" Version="1.13.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.13.0-alpha" />
@@ -21,7 +21,7 @@
     <EmbeddedResource Include="..\..\DataAPIBuilder.AI\DataAPIBuilder.AI.Web\Prompts\agent_gql.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\DataAPIBuilder.AI\DataAPIBuilder.AI.Web\Plugins\DAB_GraphQl\openapi.yml">
+    <EmbeddedResource Include="Plugins\DAB_GraphQL\openapi.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
