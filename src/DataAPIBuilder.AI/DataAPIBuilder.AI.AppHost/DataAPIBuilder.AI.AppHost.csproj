@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
-    <UserSecretsId>b604ce7b-2b8a-4011-b319-5aaa0301c574</UserSecretsId>
+    <UserSecretsId>54a98d29-2acb-49f3-842b-dafb17b780ca</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.1" />
-    <PackageReference Include="Aspire.Hosting.Azure.Sql" Version="8.0.2" />
-    <PackageReference Include="Aspire.Hosting.SqlServer" Version="8.0.2" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.1.0" />
+    <PackageReference Include="Aspire.Hosting.Azure.Sql" Version="8.1.0" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="8.1.0" />
   </ItemGroup>
 
 </Project>

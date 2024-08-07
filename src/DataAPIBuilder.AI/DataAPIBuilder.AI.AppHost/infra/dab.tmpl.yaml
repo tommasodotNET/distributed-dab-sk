@@ -1,0 +1,48 @@
+api-version: 2024-02-02-preview
+location: {{ .Env.AZURE_LOCATION }}
+identity:
+  type: UserAssigned
+  userAssignedIdentities:
+    ? "{{ .Env.AZURE_CONTAINER_REGISTRY_MANAGED_IDENTITY_ID }}"
+    : {}
+properties:
+  environmentId: {{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_ID }}
+  configuration:
+    activeRevisionsMode: single
+    runtime:
+      dotnet:
+        autoConfigureDataProtection: true
+    ingress:
+      external: false
+      targetPort: 5000
+      transport: http
+      allowInsecure: true
+    registries:
+      - server: {{ .Env.AZURE_CONTAINER_REGISTRY_ENDPOINT }}
+        identity: {{ .Env.AZURE_CONTAINER_REGISTRY_MANAGED_IDENTITY_ID }}
+    secrets:
+      - name: connectionstrings--sqldb
+        value: '{{ .Env.AZURE_SQLDB }}'
+  template:
+    volumes:
+      - name: dab-bm0
+        storageType: AzureFile
+        storageName: {{ .Env.SERVICE_DAB_VOLUME_BM0_NAME }} 
+    containers:
+      - image: {{ .Image }}
+        name: dab
+        env:
+          - name: AZURE_CLIENT_ID
+            value: {{ .Env.MANAGED_IDENTITY_CLIENT_ID }}
+          - name: ConnectionStrings__sqldb
+            secretRef: connectionstrings--sqldb
+        volumeMounts:
+          - volumeName: dab-bm0
+            mountPath: /App/dab-bm0
+        args:
+          - --ConfigFileName=./dab-bm0/dab-config.json
+    scale:
+      minReplicas: 1
+tags:
+  azd-service-name: dab
+  aspire-resource-name: dab

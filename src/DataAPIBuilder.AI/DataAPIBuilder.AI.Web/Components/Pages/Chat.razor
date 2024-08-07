@@ -43,14 +43,12 @@
 
     override protected void OnInitialized()
     {
-        var dabClient = _httpClientFactory.CreateClient("DABClient");
         kernel.ImportPluginFromOpenApiAsync(
             pluginName: "GQLPlugin",
-            filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Plugins\DAB_GraphQL\openapi.yml"),
+            filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins\DAB_GraphQL\openapi.yml"),
             executionParameters: new OpenApiFunctionExecutionParameters()
             {
-                @* ServerUrlOverride = dabClient.BaseAddress, *@
-                ServerUrlOverride = new Uri("https://dm-dab-aca-app.thankfulplant-306104b6.westeurope.azurecontainerapps.io"),
+                ServerUrlOverride = new Uri(Environment.GetEnvironmentVariable("services__dab__http__0")),
                 EnableDynamicPayload = true,
                 IgnoreNonCompliantErrors = true,
                 EnablePayloadNamespacing = true,
@@ -63,7 +61,6 @@
         ShowSpinner();
 
         var promptTemplate = PromptLoader.Load("agent_gql.yaml");
-        @* var promptTemplate = EmbeddedResource.Read("agent_rest.yaml");  *@
 
         var _settings = new OpenAIPromptExecutionSettings()
         {

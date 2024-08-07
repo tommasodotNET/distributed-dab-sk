@@ -1,10 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sql = builder.AddConnectionString("sql");
+var sql = builder.AddConnectionString("sqldb");
 
 var dabService = builder.AddContainer("dab", "mcr.microsoft.com/azure-databases/data-api-builder")
     .WithHttpEndpoint(targetPort: 5000, name: "http")
-    .WithBindMount(@"D:\src\distributed-dab-sk\aw-data-api-builder\dab-config.json", "/App/dab-config.json", true)
+    .WithBindMount(@"./dab-config.json", "/App/dab-bm0/dab-config.json", true)
+    .WithArgs("--ConfigFileName", "./dab-bm0/dab-config.json")
     .WithReference(sql)
     .WithOtlpExporter()
     .PublishAsContainer();

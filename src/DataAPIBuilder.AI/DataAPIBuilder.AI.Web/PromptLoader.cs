@@ -2,7 +2,7 @@ namespace DataAPIBuilder.AI;
 
 public class PromptLoader
 {
-    private static string PromptRepositoryPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Prompts");
+    private static string PromptRepositoryPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Prompts");
     private static readonly Dictionary<string, string> _cache = [];
 
     public static string Load(string promptFileName)

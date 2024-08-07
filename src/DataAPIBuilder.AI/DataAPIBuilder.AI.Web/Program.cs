@@ -19,11 +19,6 @@ builder.Services.AddTransient( sp => {
         .Build();
 });
 
-builder.Services.AddHttpClient("DABClient", client =>
-{
-    client.BaseAddress = new("https+http://dab");
-});
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
