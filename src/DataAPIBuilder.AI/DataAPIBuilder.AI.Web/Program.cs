@@ -13,9 +13,14 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
+var openAIKey = builder.Configuration.GetSection("OpenAI").GetValue<string>("ApiKey")
+                ?? throw new ArgumentNullException("OpenAI config not found");
+var openAIEndpoint = builder.Configuration.GetSection("OpenAI").GetValue<string>("Endpoint")
+                    ?? throw new ArgumentNullException("OpenAI config not found");
+
 builder.Services.AddTransient( sp => {
     return Kernel.CreateBuilder()
-        .AddAzureOpenAIChatCompletion("gpt-4o", "https://oai-tstocchi-us.openai.azure.com/", "3599e954626f493bb34c4e68c270fcd9")
+        .AddAzureOpenAIChatCompletion("gpt-4o", openAIEndpoint, openAIKey)
         .Build();
 });
 
