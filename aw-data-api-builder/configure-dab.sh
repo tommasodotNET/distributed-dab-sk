@@ -1,4 +1,4 @@
-dab init --database-type "mssql" --connection-string "@env('DATABASE_CONNECTION_STRING')"
+dab init --database-type "mssql" --connection-string "@env('ConnectionStrings__sql')"
 
 dab add "Customer" --source "SalesLT.Customer" --permissions "anonymous:*"
 dab add "ProductModel" --source "SalesLT.ProductModel" --permissions "anonymous:*"
