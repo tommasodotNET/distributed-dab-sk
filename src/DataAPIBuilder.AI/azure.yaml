@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: DataAPIBuilder.AI
+services:  
+  app:
+    language: dotnet
+    project: .\DataAPIBuilder.AI.AppHost\DataAPIBuilder.AI.AppHost.csproj
+    host: containerapp
