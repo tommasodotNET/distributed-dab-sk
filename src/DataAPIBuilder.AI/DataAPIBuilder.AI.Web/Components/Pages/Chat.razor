@@ -10,18 +10,22 @@
 
 <h3>Chat</h3>
 
-<label>Type in your query to ask a question about your data.</label>
-<br />
-<InputCheckbox @bind-Value="GraphQL" />
-<br />
-<div style="padding-right: 25em;">
-    <input class="input queryinput" 
-        type="text"
-        @bind-value="SearchString"
-        @onkeyup="@Enter" />
-</div>
-<br />
-<button class="button querybutton" @onclick="Search" >Search</button>
+<EditForm Model="model" OnValidSubmit="Search">
+    <div class="mb-2">
+        <label>Type in your query to ask a question about your data.</label>
+    </div>
+    <div class="mb-2">
+        <InputCheckbox @bind-Value="model.GraphQL" id="graphQL" />
+        <label for="graphQL">use GraphQL</label>
+    </div>
+    <div class="input-group mb-2" style="padding-right: 25em;">
+        <InputText class="input queryinput form-control"
+                   @bind-Value="model.SearchString"
+                   aria-label="type in your query"/>
+
+        <button type="submit" class="btn btn-outline-primary button querybutton">Search</button>
+    </div>
+</EditForm>
 
 <div>
     @if (Response != null)
@@ -35,25 +39,41 @@
 
 
 @code {
-    protected string? SearchString { get; set; }
+    //protected string? SearchString { get; set; }
     protected string? Response { get; set; }
     protected bool IsVisible { get; set; }
-    protected bool GraphQL = false;
+    //protected bool GraphQL = false;
 
-    override protected void OnInitialized()
+    private ViewModel model = new();
+
+    protected override async Task OnInitializedAsync()
     {
-        kernel.ImportPluginFromOpenApiAsync(
+        await kernel.ImportPluginFromOpenApiAsync(
             pluginName: "GQLPlugin",
             filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins/DAB_GraphQL/openapi.yml"),
             executionParameters: new OpenApiFunctionExecutionParameters()
             {
-                ServerUrlOverride = new Uri(Environment.GetEnvironmentVariable("services__dab__http__0")),
+                ServerUrlOverride = new Uri(Environment.GetEnvironmentVariable("services__dab__http__0")!),
                 EnableDynamicPayload = true,
                 IgnoreNonCompliantErrors = true,
                 EnablePayloadNamespacing = true,
-            })
-        .GetAwaiter().GetResult();
+            });
     }
+
+    //override protected void OnInitialized()
+    //{
+    //    kernel.ImportPluginFromOpenApiAsync(
+    //        pluginName: "GQLPlugin",
+    //        filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins/DAB_GraphQL/openapi.yml"),
+    //        executionParameters: new OpenApiFunctionExecutionParameters()
+    //        {
+    //            ServerUrlOverride = new Uri(Environment.GetEnvironmentVariable("services__dab__http__0")),
+    //            EnableDynamicPayload = true,
+    //            IgnoreNonCompliantErrors = true,
+    //            EnablePayloadNamespacing = true,
+    //        })
+    //    .GetAwaiter().GetResult();
+    //}
 
     protected async Task Search()
     {
@@ -73,11 +93,11 @@
 
         var kernelArgs = new KernelArguments(_settings)
         {
-            ["query"] = SearchString
+            ["query"] = model.SearchString
         };
 
         var cancellationToken = new System.Threading.CancellationToken();
-        
+
         var promptResult = _promptFunction.InvokeStreamingAsync<string>(kernel, kernelArgs, cancellationToken);
 
         await foreach (var update in promptResult.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -93,13 +113,13 @@
         });
     }
 
-    public async Task Enter(KeyboardEventArgs e)
-    {
-        if (e.Code == "Enter" || e.Code == "NumpadEnter")
-        {
-            await InvokeAsync(Search);
-        }
-    }
+    //public async Task Enter(KeyboardEventArgs e)
+    //{
+    //    if (e.Code == "Enter" || e.Code == "NumpadEnter")
+    //    {
+    //        await InvokeAsync(Search);
+    //    }
+    //}
 
     public void ShowSpinner()
     {
@@ -113,4 +133,10 @@
         StateHasChanged();
     }
 
+    class ViewModel
+    {
+        public string? SearchString { get; set; }
+
+        public bool GraphQL { get; set; }
+    }
 }
