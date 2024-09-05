@@ -54,21 +54,6 @@
             });
     }
 
-    //override protected void OnInitialized()
-    //{
-    //    kernel.ImportPluginFromOpenApiAsync(
-    //        pluginName: "GQLPlugin",
-    //        filePath: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins/DAB_GraphQL/openapi.yml"),
-    //        executionParameters: new OpenApiFunctionExecutionParameters()
-    //        {
-    //            ServerUrlOverride = new Uri(Environment.GetEnvironmentVariable("services__dab__http__0")),
-    //            EnableDynamicPayload = true,
-    //            IgnoreNonCompliantErrors = true,
-    //            EnablePayloadNamespacing = true,
-    //        })
-    //    .GetAwaiter().GetResult();
-    //}
-
     protected async Task Search()
     {
         await InvokeAsync(() =>
