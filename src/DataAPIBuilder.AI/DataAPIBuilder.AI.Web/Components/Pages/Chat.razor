@@ -14,10 +14,6 @@
     <div class="mb-2">
         <label>Type in your query to ask a question about your data.</label>
     </div>
-    <div class="mb-2">
-        <InputCheckbox @bind-Value="model.GraphQL" id="graphQL" />
-        <label for="graphQL">use GraphQL</label>
-    </div>
     <div class="input-group mb-2" style="padding-right: 25em;">
         <InputText class="input queryinput form-control"
                    @bind-Value="model.SearchString"
@@ -34,16 +30,14 @@
     }
 </div>
 
-<br />
-<br />
-
+@if (IsVisible)
+{
+    <div class="spinner"></div>
+}
 
 @code {
-    //protected string? SearchString { get; set; }
     protected string? Response { get; set; }
     protected bool IsVisible { get; set; }
-    //protected bool GraphQL = false;
-
     private ViewModel model = new();
 
     protected override async Task OnInitializedAsync()
@@ -77,7 +71,10 @@
 
     protected async Task Search()
     {
-        ShowSpinner();
+        await InvokeAsync(() =>
+        {
+            ShowSpinner();
+        });
 
         var promptTemplate = PromptLoader.Load("agent_gql.yaml");
 
@@ -113,14 +110,6 @@
         });
     }
 
-    //public async Task Enter(KeyboardEventArgs e)
-    //{
-    //    if (e.Code == "Enter" || e.Code == "NumpadEnter")
-    //    {
-    //        await InvokeAsync(Search);
-    //    }
-    //}
-
     public void ShowSpinner()
     {
         IsVisible = true;
@@ -136,7 +125,5 @@
     class ViewModel
     {
         public string? SearchString { get; set; }
-
-        public bool GraphQL { get; set; }
     }
 }
