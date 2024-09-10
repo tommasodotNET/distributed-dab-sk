@@ -19,7 +19,7 @@
                    @bind-Value="model.SearchString"
                    aria-label="type in your query"/>
 
-        <button type="submit" class="btn btn-outline-primary button querybutton">Search</button>
+        <button disabled="@IsVisible" type="submit" class="btn btn-outline-primary button querybutton">Search</button>
     </div>
 </EditForm>
 
@@ -56,55 +56,52 @@
 
     protected async Task Search()
     {
-        await InvokeAsync(() =>
+        ShowSpinner();
+
+        try
         {
-            ShowSpinner();
-        });
+            var promptTemplate = PromptLoader.Load("agent_gql.yaml");
 
-        var promptTemplate = PromptLoader.Load("agent_gql.yaml");
+            var _settings = new OpenAIPromptExecutionSettings()
+            {
+                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                Temperature = 0.1,
+                MaxTokens = 500,
+                ResultsPerPrompt = 1,
+            };
 
-        var _settings = new OpenAIPromptExecutionSettings()
-        {
-            ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
-            Temperature = 0.1,
-            MaxTokens = 500,
-            ResultsPerPrompt = 1,
-        };
+            var _promptFunction = kernel.CreateFunctionFromPromptYaml(promptTemplate, promptTemplateFactory: new HandlebarsPromptTemplateFactory());
 
-        var _promptFunction = kernel.CreateFunctionFromPromptYaml(promptTemplate, promptTemplateFactory: new HandlebarsPromptTemplateFactory());
+            var kernelArgs = new KernelArguments(_settings)
+            {
+                ["query"] = model.SearchString
+            };
 
-        var kernelArgs = new KernelArguments(_settings)
-        {
-            ["query"] = model.SearchString
-        };
+            var cancellationToken = new System.Threading.CancellationToken();
 
-        var cancellationToken = new System.Threading.CancellationToken();
+            var promptResult = _promptFunction.InvokeStreamingAsync<string>(kernel, kernelArgs, cancellationToken);
 
-        var promptResult = _promptFunction.InvokeStreamingAsync<string>(kernel, kernelArgs, cancellationToken);
+            await foreach (var update in promptResult.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                if (string.IsNullOrEmpty(update)) { continue; }
 
-        await foreach (var update in promptResult.WithCancellation(cancellationToken).ConfigureAwait(false))
-        {
-            if (string.IsNullOrEmpty(update)) { continue; }
-
-            Response += update;
+                Response += update;
+            }
         }
-
-        await InvokeAsync(() =>
+        finally
         {
             HideSpinner();
-        });
+        }
     }
 
     public void ShowSpinner()
     {
         IsVisible = true;
-        StateHasChanged();
     }
 
     public void HideSpinner()
     {
         IsVisible = false;
-        StateHasChanged();
     }
 
     class ViewModel
