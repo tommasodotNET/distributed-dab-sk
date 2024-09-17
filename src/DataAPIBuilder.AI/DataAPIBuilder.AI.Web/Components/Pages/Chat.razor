@@ -85,7 +85,7 @@
             {
                 if (string.IsNullOrEmpty(update)) { continue; }
 
-                Response += update;
+                Response += update.Replace("\n", "<br/>");
             }
         }
         finally
